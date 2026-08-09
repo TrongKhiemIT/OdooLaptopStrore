@@ -1,0 +1,5 @@
+[lint]
+select = ["E", "F", "W", "B"]
+
+[lint.per-file-ignores]
+"**/__manifest__.py" = ["B018"]
