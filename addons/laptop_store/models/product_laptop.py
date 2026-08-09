@@ -8,5 +8,5 @@ class ProductLaptop(models.Model):
     name = fields.Char(string="Tên laptop", required=True)
     brand = fields.Char(string="Hãng")
     price = fields.Float(string="Giá bán")
-    stock_qty = fields.Interger(string="Số lượng tồn kho")
+    stock_qty = fields.Integer(string="Số lượng tồn kho")
     description = fields.Text(string="Mô tả")
