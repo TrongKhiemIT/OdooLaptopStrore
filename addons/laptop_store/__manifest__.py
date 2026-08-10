@@ -4,7 +4,10 @@
     "category": "Sales",
     "summary": "Quản lý cửa hàng laptop",
     "depends": ["base"],
-    "data": [],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/laptop_product_views.xml",
+    ],
     "installable": True,
     "application": True,
     "license": "LGPL-3",
