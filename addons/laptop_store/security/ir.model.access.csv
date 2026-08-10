@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_laptop_product,laptop.product.access,model_laptop_product,base.group_user,1,1,1,1
+access_laptop_sale_order,access_laptop_sale_order,model_laptop_sale_order,base.group_user,1,1,1,1
+access_laptop_sale_order_line,access_laptop_sale_order_line,model_laptop_sale_order_line,base.group_user,1,1,1,1

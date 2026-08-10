@@ -7,6 +7,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/laptop_product_views.xml",
+        "views/laptop_sale_order_views.xml",
     ],
     "installable": True,
     "application": True,
