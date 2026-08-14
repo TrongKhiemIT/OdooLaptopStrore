@@ -26,10 +26,18 @@ services:
       HOST: db
       USER: odoo
       PASSWORD: odoo
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
     volumes:
       - ./addons:/mnt/extra-addons
       - ./config/odoo.conf:/etc/odoo/odoo.conf
     command: odoo -c /etc/odoo/odoo.conf --dev=all
+  
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
 
 volumes:
   odoo-db-data:

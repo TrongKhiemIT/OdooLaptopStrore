@@ -8,6 +8,7 @@
         "security/ir.model.access.csv",
         "views/laptop_product_views.xml",
         "views/laptop_sale_order_views.xml",
+        "reports/laptop_sale_order_report.xml",
     ],
     "installable": True,
     "application": True,

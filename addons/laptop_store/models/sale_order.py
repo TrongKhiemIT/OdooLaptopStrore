@@ -1,6 +1,12 @@
 from odoo import models, fields, api
 
 
+@api.depends("line_ids.subtotal")
+def _compute_total(self):
+    for order in self:
+        order.total = sum(order.line_ids.mapped("subtotal"))
+
+
 class LaptopSaleOrder(models.Model):
     _name = "laptop.sale.order"
     _description = "Đơn bán Laptop"
@@ -21,6 +27,11 @@ class LaptopSaleOrder(models.Model):
         "laptop.sale.order.line", "order_id", string="Chi tiết đơn"
     )
     total = fields.Float(string="Tổng tiền", compute="_compute_total")
+
+    @api.depends("line_ids.subtotal")
+    def _compute_total(self):
+        for order in self:
+            order.total = sum(order.line_ids.mapped("subtotal"))
 
 
 class LaptopSaleOrderLine(models.Model):

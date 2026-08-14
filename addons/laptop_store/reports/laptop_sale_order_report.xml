@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_laptop_sale_order" model="ir.actions.report">
+        <field name="name">Hóa đơn bán laptop</field>
+        <field name="model">laptop.sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">laptop_store.report_laptop_sale_order_pdf</field>
+        <field name="binding_model_id" ref="model_laptop_sale_order"/>
+    </record>
+
+    <template id="report_laptop_sale_order_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="order">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Hóa đơn: <span t-esc="order.name" /></h2>
+                        <p>Khách hàng: <span t-esc="order.customer_id.name" /></p>
+                        <p>Ngày: <span t-esc="order.date" /></p>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>LapTop</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                            <t t-foreach="order.line_ids" t-as="line">
+                                <tr>
+                                    <td>
+                                        <span t-esc="line.product_id.name" />
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.qty" />
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.unit_price" />
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.subtotal" />
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
+                        <h3>Tổng tiền: <span t-esc="order.total" /></h3>
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+
+</odoo>
