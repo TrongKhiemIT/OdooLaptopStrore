@@ -10,6 +10,7 @@
         "views/laptop_sale_order_views.xml",
         "reports/laptop_sale_order_report.xml",
         "reports/laptop_sale_order_email.xml",
+        "views/laptop_stock_receipt_views.xml",
     ],
     "installable": True,
     "application": True,
