@@ -1,12 +1,6 @@
 from odoo import models, fields, api
 
 
-@api.depends("line_ids.subtotal")
-def _compute_total(self):
-    for order in self:
-        order.total = sum(order.line_ids.mapped("subtotal"))
-
-
 class LaptopSaleOrder(models.Model):
     _name = "laptop.sale.order"
     _description = "Đơn bán Laptop"
@@ -27,6 +21,15 @@ class LaptopSaleOrder(models.Model):
         "laptop.sale.order.line", "order_id", string="Chi tiết đơn"
     )
     total = fields.Float(string="Tổng tiền", compute="_compute_total")
+
+    def action_send_email(self):
+        template = self.env.ref("laptop_store.email_template_laptop_sale_order")
+        for order in self:
+            template.send_mail(order.id, force_send=True)
+        return True
+
+    def action_print_report(self):
+        return self.env.ref("laptop_store.report_laptop_sale_order").report_action(self)
 
     @api.depends("line_ids.subtotal")
     def _compute_total(self):

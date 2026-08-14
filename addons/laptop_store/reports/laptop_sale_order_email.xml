@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="email_template_laptop_sale_order" model="mail.template">
+        <field name="name">Hóa đơn bán Laptop - Email</field>
+        <field name="model_id" ref="model_laptop_sale_order" />
+        <field name="subject">Hóa đơn {{object.name}} của Laptop Store</field>
+        <field name="email_to">{{object.customer_id.email}}</field>
+        <field name="body_html">
+            <![CDATA[ 
+            <p>Chào <b t-esc="object.customer_id.name"/>.</p>
+            <p>Cảm ơn bạn đã mua hàng tại LaptopStore.</p>
+            <p>Đơn <b t-esc="object.name"/> ngày <span t-esc="object.date"/> có Tổng tiền <b t-esc="object.total"/>.</p>
+            <p>Hóa đơn PDF đính kèm trong email này.</p>
+            ]]>
+        </field>
+        <field name="report_template_ids" eval="[(6, 0, [ref('report_laptop_sale_order')])]" />
+    </record>
+
+</odoo>

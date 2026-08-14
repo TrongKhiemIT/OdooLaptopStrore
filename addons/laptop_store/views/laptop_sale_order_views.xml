@@ -20,6 +20,11 @@
         <field name="model">laptop.sale.order</field>
         <field name="arch" type="xml">
             <form string="Đơn bán">
+                <header>
+                    <button name="action_send_email" string="Gửi hóa đơn" type="object"
+                        class="btn-primary" />
+                    <button name="action_print_report" string="In hóa đơn" type="object" />
+                </header>
                 <group>
                     <field name="name" />
                     <field name="customer_id" />
