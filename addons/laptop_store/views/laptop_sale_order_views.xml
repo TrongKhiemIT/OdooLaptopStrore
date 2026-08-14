@@ -24,6 +24,12 @@
                     <button name="action_send_email" string="Gửi hóa đơn" type="object"
                         class="btn-primary" />
                     <button name="action_print_report" string="In hóa đơn" type="object" />
+                    <button name="action_confirm" string="Xác nhận" type="object"
+                        invisible="state != 'draft'" class="btn-primary" />
+                    <button name="action_done" string="Hoàn thành" type="object"
+                        invisible="state != 'confirmed'" />
+                    <button name="action_cancel" string="Hủy đơn" type="object"
+                        invisible="state == 'draft'" />
                 </header>
                 <group>
                     <field name="name" />

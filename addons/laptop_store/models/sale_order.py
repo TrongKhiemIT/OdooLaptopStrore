@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
 
 
 class LaptopSaleOrder(models.Model):
@@ -35,6 +36,25 @@ class LaptopSaleOrder(models.Model):
     def _compute_total(self):
         for order in self:
             order.total = sum(order.line_ids.mapped("subtotal"))
+
+    def action_confirm(self):
+        if self.state != "draft":
+            raise UserError("Chỉ được xác nhận đơn đang ở trạng thái Nháp.")
+        for line in self.line_ids:
+            if line.qty > line.product_id.stock_qty:
+                raise UserError(f"Không đủ hàng cho Laptop {line.product_id.name}")
+            else:
+                line.product_id.stock_qty -= line.qty
+        self.state = "confirmed"
+
+    def action_done(self):
+        self.state = "done"
+
+    def action_cancel(self):
+        if self.state == "confirmed" or self.state == "done":
+            for line in self.line_ids:
+                line.product_id.stock_qty += line.qty
+                self.state = "draft"
 
 
 class LaptopSaleOrderLine(models.Model):

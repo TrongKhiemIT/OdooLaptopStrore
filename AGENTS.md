@@ -25,6 +25,7 @@ addons/laptop_store/
 │   ├── laptop_product_views.xml
 │   └── laptop_sale_order_views.xml
 ├── reports/
+│   ├── laptop_sale_order_email.xml  # mail.template
 │   └── laptop_sale_order_report.xml
 └── security/
     └── ir.model.access.csv
@@ -74,6 +75,10 @@ docker compose logs odoo --since 5m
 6. Odoo 17: muốn nút **In/Print** xuất hiện trên form thì report phải khai báo bằng `<record model="ir.actions.report">` và có field `binding_model_id` (cú pháp `<report>` thẳng không còn hợp lệ).
 7. Odoo 17 dùng URL hash (`/web#action=...`), không có route `/odoo/action-...` (đó là Odoo 16).
 8. Sau khi website không hiện menu/nút mới: đăng xuất + đóng trình duyệt hoặc hard refresh (Ctrl+Shift+R) để xóa cache web client.
+9.  Odoo 17: `mail.template` không còn field `report_template` (bỏ từ Odoo 12). Dùng `report_template_ids` (Many2many ir.actions.report) + `eval="[(6, 0, [ref(...)])]"`.
+10. Email template Odoo 17: subject / email_to dùng placeholder `{{ ... }}` (not `${ }` — cú pháp Odoo 8-11). `body_html` dùng QWeb `t-esc`.
+11. Thuộc tính `invisible` trên button = "điều kiện để ẨN" (ngược nghĩa thường nghĩ). Nút hiện ở state X thì ghi `invisible="state != 'X'"`.
+12. Chặn nghiệp vụ bằng `raise UserError("...")` (import từ odoo.exceptions); chuỗi có biến phải là f-string `f"..."`. Kiểm tra `state` trước khi trừ stock để tránh trừ 2 lần.
 
 ## Trạng thái hiện tại (đang giữa Bước 7)
 - ✅ PDF report: form đơn bán có nút In, in PDF hoạt động.
