@@ -18,17 +18,20 @@ addons/laptop_store/
 ├── __manifest__.py
 ├── models/
 │   ├── __init__.py
-│   ├── product_laptop.py   # laptop.product
+│   ├── product_laptop.py   # laptop.product (cost_price chỉ Quản lý thấy)
 │   ├── partner.py          # inherit res.partner (is_laptop_customer)
-│   └── sale_order.py       # laptop.sale.order + laptop.sale.order.line
+│   ├── sale_order.py       # laptop.sale.order + laptop.sale.order.line
+│   └── stock_receipt.py    # laptop.stock.receipt + laptop.stock.receipt.line
 ├── views/
 │   ├── laptop_product_views.xml
-│   └── laptop_sale_order_views.xml
+│   ├── laptop_sale_order_views.xml
+│   └── laptop_stock_receipt_views.xml
 ├── reports/
 │   ├── laptop_sale_order_email.xml  # mail.template
 │   └── laptop_sale_order_report.xml
 └── security/
-    └── ir.model.access.csv
+    ├── ir.model.access.csv          # ACL theo nhóm (10 dòng)
+    └── laptop_security.xml          # res.groups + ir.module.category
 ```
 
 ## Mô hình quan hệ
@@ -41,6 +44,10 @@ laptop.product ─1─< product_id <─n── laptop.sale.order.line
 - `laptop.sale.order`: name (Char, default "/"), customer_id (Many2one res.partner, required), date (Date, default today), state (Selection: draft/confirmed/done, default draft), line_ids (One2many), total (compute = tổng subtotal).
 - `laptop.sale.order.line`: order_id (Many2one, ondelete cascade), product_id (Many2one laptop.product, required), qty (Integer default 1), unit_price (Float), subtotal (compute = qty × unit_price).
 - `total` / `subtotal` là compute field → KHÔNG có cột trong DB.
+- `laptop.stock.receipt`: name (Char, default "/"), date (Date, default today), state (Selection: draft/done, default draft), line_ids (One2many).
+- `laptop.stock.receipt.line`: receipt_id (Many2one, ondelete cascade), product_id (Many2one laptop.product, required), qty (Integer default 1).
+- `laptop.product`: thêm `cost_price` (Float, `groups="laptop_store.group_laptop_store_manager"` — chỉ Quản lý đọc/ghi).
+- Nhập kho = cộng `stock_qty` (`action_confirm`), Hủy = trừ lại (`action_cancel`) — đối xứng với bán hàng.
 
 ## Lệnh thường dùng (chạy từ `C:\Work\Code\OdooLaptopStore`)
 ```powershell
@@ -79,18 +86,23 @@ docker compose logs odoo --since 5m
 10. Email template Odoo 17: subject / email_to dùng placeholder `{{ ... }}` (not `${ }` — cú pháp Odoo 8-11). `body_html` dùng QWeb `t-esc`.
 11. Thuộc tính `invisible` trên button = "điều kiện để ẨN" (ngược nghĩa thường nghĩ). Nút hiện ở state X thì ghi `invisible="state != 'X'"`.
 12. Chặn nghiệp vụ bằng `raise UserError("...")` (import từ odoo.exceptions); chuỗi có biến phải là f-string `f"..."`. Kiểm tra `state` trước khi trừ stock để tránh trừ 2 lần.
+13. File security XML (nhóm `res.groups`) phải khai báo TRƯỚC `ir.model.access.csv` trong `data` của manifest — CSV tham chiếu group.
+14. Tạo group mới ⇒ user cũ "Access Error" là BÌNH THƯỜNG (đúng thiết kế): phải gán user vào group mới qua Settings → Users → Access Rights.
+15. ACL mỗi model 1 dòng/group; cột `id` của CSV là XMLID PHẢI duy nhất. Quyền nhân viên thường `1,1,1,0` (không xóa), quản lý `1,1,1,1`.
+16. Field `groups=` bảo vệ 2 tầng: model (ORM chặn đọc/ghi) + view (không hiển thị cho người khác).
+17. Model mới (file Python) + view mới ⇒ cần CẢ `docker compose restart odoo` LẪN `-u laptop_store`.
 
-## Trạng thái hiện tại (đang giữa Bước 7)
-- ✅ PDF report: form đơn bán có nút In, in PDF hoạt động.
-- ✅ MailHog: 3 container chạy (db, odoo, mailhog).
-- ⏳ Email: chưa cấu hình Outgoing Mail Server (trỏ `mailhog:1025`), chưa tạo email template, chưa có nút Gửi email.
-- Việc kế tiếp: tạo email template QWeb + nút gửi mail trên `laptop.sale.order`.
+## Trạng thái hiện tại (sau Bước 10)
+- ✅ Bước 7: gửi email hóa đơn kèm PDF qua MailHog (template `{{ }}` + `report_template_ids`).
+- ✅ Bước 8: quản lý kho — đơn bán Xác nhận trừ stock, Hủy cộng lại (button `invisible` + `UserError`).
+- ✅ Bước 9: phiếu nhập kho — Xác nhận cộng stock, Hủy trừ lại (pattern lặp lại như Bước 8).
+- ✅ Bước 10: phân quyền — 2 group (Nhân viên `1,1,1,0` / Quản lý `1,1,1,1`, quản lý kế thừa nhân viên), field `cost_price` chỉ Quản lý. Admin (nguyentrongkhiem010117@gmail.com) nằm cả 2 nhóm; có user test `nhanvien@test.com` chỉ nhóm Nhân viên.
+- Việc kế tiếp: chọn Bước 11 (Owl widget / CI-CD / record rules...).
 
 ## Lộ trình sắp tới (đã cam kết với người học)
-1. Bước 7 còn lại: gửi email PDF qua MailHog.
-2. Bước 8: quản lý kho (nhập/xuất) hoặc phân quyền — chưa chốt, hỏi người dùng.
-3. Owl widget nâng cao (OWL).
-4. CI/CD (GitHub Actions) + deploy VPS.
+1. Owl widget nâng cao (OWL).
+2. CI/CD (GitHub Actions) + deploy VPS.
+3. Nâng cao: record rules (ir.rule), trường `_check`, action server, ...
 
 ## Ghi chú khác
 - Học viên là người mới Python/Odoo, thích giải thích từng dòng, không so sánh với Prisma/NestJS/React (đã yêu cầu dừng so sánh).
