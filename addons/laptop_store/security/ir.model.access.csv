@@ -1,6 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_laptop_product,laptop.product.access,model_laptop_product,base.group_user,1,1,1,1
-access_laptop_sale_order,access_laptop_sale_order,model_laptop_sale_order,base.group_user,1,1,1,1
-access_laptop_sale_order_line,access_laptop_sale_order_line,model_laptop_sale_order_line,base.group_user,1,1,1,1
-access_laptop_stock_receipt,access_laptop_stock_receipt,model_laptop_stock_receipt,base.group_user,1,1,1,1
-access_laptop_stock_receipt_line,access_laptop_stock_receipt_line,model_laptop_stock_receipt_line,base.group_user,1,1,1,1
+access_laptop_product_user,laptop.product.user,model_laptop_product,group_laptop_store_user,1,1,1,0
+access_laptop_product_manager,laptop.product.manager,model_laptop_product,group_laptop_store_manager,1,1,1,1
+access_laptop_sale_order_user,laptop.sale.order.user,model_laptop_sale_order,group_laptop_store_user,1,1,1,0
+access_laptop_sale_order_manager,laptop.sale.order.manager,model_laptop_sale_order,group_laptop_store_manager,1,1,1,1
+access_laptop_sale_order_line_user,laptop.sale.order.line.user,model_laptop_sale_order_line,group_laptop_store_user,1,1,1,0
+access_laptop_sale_order_line_manager,laptop.sale.order.line.manager,model_laptop_sale_order_line,group_laptop_store_manager,1,1,1,1
+access_laptop_stock_receipt_user,laptop.stock.receipt.user,model_laptop_stock_receipt,group_laptop_store_user,1,1,1,0
+access_laptop_stock_receipt_manager,laptop.stock.receipt.manager,model_laptop_stock_receipt,group_laptop_store_manager,1,1,1,1
+access_laptop_stock_receipt_line_user,laptop.stock.receipt.line.user,model_laptop_stock_receipt_line,group_laptop_store_user,1,1,1,0
+access_laptop_stock_receipt_line_manager,laptop.stock.receipt.line.manager,model_laptop_stock_receipt_line,group_laptop_store_manager,1,1,1,1

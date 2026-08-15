@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <!-- Category: Nhóm label hiển thị-->
+        <record id="module_category_laptop_store" model="ir.module.category">
+            <field name="name">Laptop Store</field>
+        </record>
+
+        <!-- Nhóm nhân viên-->
+        <record id="group_laptop_store_user" model="res.groups">
+            <field name="name">Nhân viên cửa hàng</field>
+            <field name="category_id" ref="module_category_laptop_store" />
+        </record>
+
+        <!-- Nhóm quản lý: kế thừa từ nhóm nhân viên qua implied_ids-->
+        <record id="group_laptop_store_manager" model="res.groups">
+            <field name="name">Quản lý cửa hàng</field>
+            <field name="category_id" ref="module_category_laptop_store" />
+            <field name="implied_ids" eval="[(4, ref('group_laptop_store_user'))]" />
+        </record>
+    </data>
+
+
+</odoo>

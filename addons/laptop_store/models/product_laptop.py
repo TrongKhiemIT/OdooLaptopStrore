@@ -10,3 +10,6 @@ class ProductLaptop(models.Model):
     price = fields.Float(string="Giá bán")
     stock_qty = fields.Integer(string="Số lượng tồn kho")
     description = fields.Text(string="Mô tả")
+    cost_price = fields.Float(
+        string="Giá vốn", groups="laptop_store.group_laptop_store_manager"
+    )

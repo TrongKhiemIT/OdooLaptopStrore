@@ -9,6 +9,7 @@
                 <field name="brand" />
                 <field name="price" />
                 <field name="stock_qty" />
+                <field name="cost_price" groups="laptop_store.group_laptop_store_manager" />
             </tree>
         </field>
     </record>
@@ -24,6 +25,7 @@
                     <field name="price" />
                     <field name="stock_qty" />
                     <field name="description" />
+                    <field name="cost_price" groups="laptop_store.group_laptop_store_manager" />
                 </group>
             </form>
         </field>
