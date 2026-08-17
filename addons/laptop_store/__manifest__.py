@@ -13,6 +13,12 @@
         "reports/laptop_sale_order_email.xml",
         "views/laptop_stock_receipt_views.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "laptop_store/static/src/js/laptop_stock_badge.js",
+            "laptop_store/static/src/xml/laptop_stock_badge.xml",
+        ],
+    },
     "installable": True,
     "application": True,
     "license": "LGPL-3",

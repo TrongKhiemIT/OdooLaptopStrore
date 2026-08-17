@@ -8,7 +8,7 @@
                 <field name="name" />
                 <field name="brand" />
                 <field name="price" />
-                <field name="stock_qty" />
+                <field name="stock_qty" widget="laptop_stock_badge" />
                 <field name="cost_price" groups="laptop_store.group_laptop_store_manager" />
             </tree>
         </field>
@@ -23,7 +23,7 @@
                     <field name="name" />
                     <field name="brand" />
                     <field name="price" />
-                    <field name="stock_qty" />
+                    <field name="stock_qty" widget="laptop_stock_badge" />
                     <field name="description" />
                     <field name="cost_price" groups="laptop_store.group_laptop_store_manager" />
                 </group>

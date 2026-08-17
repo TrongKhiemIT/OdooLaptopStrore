@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <t t-name="laptop_store.StockBadge">
+        <span t-att-class="'badge ' + getBadgeColor">
+            <t t-esc="props.record.data.stock_qty" /> - <t t-esc="getLabel" />
+        </span>
+    </t>
+
+
+</odoo>
