@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="laptop_dashboard_action" model="ir.actions.client">
+        <field name="name">Tổng quan</field>
+        <field name="tag">laptop_store.Dashboard</field>
+    </record>
+
+    <menuitem
+        id="laptop_store_dashboard_menu"
+        name="Tổng quan"
+        parent="menu_laptop_store_root"
+        action="laptop_dashboard_action"
+        sequence="1" />
+
+</odoo>

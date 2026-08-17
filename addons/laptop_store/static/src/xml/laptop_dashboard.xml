@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <t t-name="laptop_store.LaptopDashboard">
+        <t t-if="state.loading">
+            <span>
+                Đang tải dữ liệu...
+            </span>
+        </t>
+
+        <t t-else="">
+            <div class="row">
+                <t t-foreach="cards" t-as="card" t-key="card.label">
+                    <div class="col-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="display-4 fw-bold">
+                                    <t t-esc="card.value" />
+                                </div>
+                                <div class="text-muted">
+                                    <t t-esc="card.label" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </t>
+
+</odoo>
