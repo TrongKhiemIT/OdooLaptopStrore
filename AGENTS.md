@@ -101,11 +101,12 @@ docker compose logs odoo --since 5m
 - ✅ Bước 9: phiếu nhập kho — Xác nhận cộng stock, Hủy trừ lại (pattern lặp lại như Bước 8).
 - ✅ Bước 10: phân quyền — 2 group (Nhân viên `1,1,1,0` / Quản lý `1,1,1,1`, quản lý kế thừa nhân viên), field `cost_price` chỉ Quản lý. Admin (nguyentrongkhiem010117@gmail.com) nằm cả 2 nhóm; có user test `nhanvien@test.com` chỉ nhóm Nhân viên.
 - ✅ Bước 11: OWL widget `laptop_stock_badge` — badge màu theo `stock_qty` (đỏ 0 / vàng 1-5 / xanh >5), reactive đổi màu ngay khi sửa. Đăng ký `{component}` + `static template`.
-- Việc kế tiếp: Bước 12 — dashboard tổng quan (thống kê tồn kho, tổng tiền bán) dùng OWL.
+- ✅ Bước 12: dashboard "Tổng quan" — client action (`ir.actions.client` + `tag`), `@api.model` method trả dict, JS gọi bằng `orm.call`, `onMounted` + `useState`, `t-foreach`/`t-key`, format tiền `toLocaleString("vi-VN")`.
+- Việc kế tiếp: Bước 13 — CI/CD GitHub Actions.
 
 ## Lộ trình sắp tới (đã cam kết với người học)
-1. Dashboard OWL (Bước 12).
-2. CI/CD (GitHub Actions) + deploy VPS.
+1. CI/CD (GitHub Actions) — tự kiểm tra lỗi khi push.
+2. Deploy VPS.
 3. Nâng cao: record rules (ir.rule), trường `_check`, action server, ...
 
 ## Ghi chú khác
