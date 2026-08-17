@@ -91,16 +91,20 @@ docker compose logs odoo --since 5m
 15. ACL mỗi model 1 dòng/group; cột `id` của CSV là XMLID PHẢI duy nhất. Quyền nhân viên thường `1,1,1,0` (không xóa), quản lý `1,1,1,1`.
 16. Field `groups=` bảo vệ 2 tầng: model (ORM chặn đọc/ghi) + view (không hiển thị cho người khác).
 17. Model mới (file Python) + view mới ⇒ cần CẢ `docker compose restart odoo` LẪN `-u laptop_store`.
+18. OWL: template trong `static/src/xml` phải dùng `<t t-name="addon.ClassName">` làm CON TRỰC TIẾP của `<odoo>` (không bọc `<template>` — đó là cú pháp QWeb server). Tên t-name phải khớp CHÍNH XÁC chuỗi trong `static template` của class JS.
+19. OWL widget field: đăng ký bằng OBJECT `{ component: X }` (không phải class trần): `registry.category("fields").add("ten_widget", { component: X })`. Import `IntegerField` từ `@web/views/fields/integer/integer_field`.
+20. File JS/template phải khai trong `"assets": { "web.assets_backend": [...] }` của manifest. Lỗi giao diện trắng thường do asset compile fail — đọc `docker compose logs odoo` để thấy "Parsing asset bundle ... has failed".
 
 ## Trạng thái hiện tại (sau Bước 10)
 - ✅ Bước 7: gửi email hóa đơn kèm PDF qua MailHog (template `{{ }}` + `report_template_ids`).
 - ✅ Bước 8: quản lý kho — đơn bán Xác nhận trừ stock, Hủy cộng lại (button `invisible` + `UserError`).
 - ✅ Bước 9: phiếu nhập kho — Xác nhận cộng stock, Hủy trừ lại (pattern lặp lại như Bước 8).
 - ✅ Bước 10: phân quyền — 2 group (Nhân viên `1,1,1,0` / Quản lý `1,1,1,1`, quản lý kế thừa nhân viên), field `cost_price` chỉ Quản lý. Admin (nguyentrongkhiem010117@gmail.com) nằm cả 2 nhóm; có user test `nhanvien@test.com` chỉ nhóm Nhân viên.
-- Việc kế tiếp: chọn Bước 11 (Owl widget / CI-CD / record rules...).
+- ✅ Bước 11: OWL widget `laptop_stock_badge` — badge màu theo `stock_qty` (đỏ 0 / vàng 1-5 / xanh >5), reactive đổi màu ngay khi sửa. Đăng ký `{component}` + `static template`.
+- Việc kế tiếp: Bước 12 — dashboard tổng quan (thống kê tồn kho, tổng tiền bán) dùng OWL.
 
 ## Lộ trình sắp tới (đã cam kết với người học)
-1. Owl widget nâng cao (OWL).
+1. Dashboard OWL (Bước 12).
 2. CI/CD (GitHub Actions) + deploy VPS.
 3. Nâng cao: record rules (ir.rule), trường `_check`, action server, ...
 
