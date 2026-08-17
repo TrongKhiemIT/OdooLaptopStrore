@@ -1,0 +1,76 @@
+name: CI
+# Tên workflow — hiển thị trong tab "Actions" của GitHub.
+
+on:
+# Khai báo SỰ KIỆN nào kích hoạt workflow này.
+
+  push:
+  # Kích hoạt khi có commit push lên GitHub.
+
+    branches:
+    # Chỉ chạy khi push vào các nhánh được liệt kê bên dưới.
+
+      - main
+      # Chỉ nhánh main. (Tránh chạy trên nhánh nháp.)
+
+jobs:
+# Nơi khai báo các "job" — mỗi job chạy trên 1 máy ảo riêng.
+
+  build:
+  # Tên job (tự đặt, vd "build").
+
+    runs-on: ubuntu-latest
+    # GitHub cấp 1 máy ảo Ubuntu mới nhất để chạy job này.
+    # (Không liên quan server của bạn — chỉ là hạ tầng tạm của GitHub.)
+
+    steps:
+    # Danh sách các bước chạy TUẦN TỰ trong job.
+
+      - name: Checkout code
+      # Tên bước (hiển thị trong log để dễ đọc).
+
+        uses: actions/checkout@v4
+        # Action có sẵn của GitHub: lấy toàn bộ code của repo về máy ảo.
+        # Cú pháp: uses = tên action + @phiên_bản (v4 là version).
+
+      - name: Start Docker Compose
+      # Bước 2: bật các container lên.
+
+        run: docker compose up -d
+        # run: chạy 1 lệnh shell trên máy ảo.
+        # docker compose up -d: giống lệnh bạn chạy ở máy nhà —
+        # bật db, odoo, mailhog (dựa vào docker-compose.yml có sẵn trong repo).
+
+      - name: Wait for Odoo
+      # Bước 3: chờ Odoo khởi động xong.
+
+        run: |
+
+          for i in $(seq 1 30); do
+          # Vòng lặp chạy tối đa 30 lần.
+            if curl -s http://localhost:8069 > /dev/null; then
+            # curl -s: gửi request HTTP tới Odoo, bỏ output.
+            # Nếu thành công (trang trả về) → Odoo đã sẵn sàng.
+              echo "Odoo is ready"
+              # In thông báo.
+              exit 0
+              # Thoát vòng lặp thành công.
+            fi
+            sleep 2
+            # Nếu chưa sẵn sàng, chờ 2 giây rồi thử lại.
+          done
+          # Kết thúc vòng lặp.
+          echo "Odoo failed to start"
+          # Nếu chạy hết 30 lần mà vẫn chưa sẵn sàng.
+          exit 1
+          # Báo lỗi → workflow dừng, đánh dấu ĐỎ.
+
+      - name: Install/Upgrade laptop_store module
+      # Bước 4: cài/upgrade module — bước kiểm tra LỖI code chính.
+
+        # DB CI mới trống → dùng -i (install) chứ KHÔNG phải -u (upgrade module đã cài).
+        run: docker compose exec -T odoo odoo -c /etc/odoo/odoo.conf -d laptopstore -i laptop_store --stop-after-init
+        # CHÍNH LÀ lệnh bạn chạy ở máy nhà!
+        # Nếu code Python/XML của bạn lỗi → lệnh này thoát mã lỗi ≠ 0
+        # → GitHub đánh dấu workflow ĐỎ → bạn biết ngay có bug.
+        # Nếu chạy sạch → workflow XANH = code OK.
