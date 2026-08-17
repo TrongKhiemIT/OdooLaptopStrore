@@ -29,7 +29,7 @@ jobs:
       - name: Checkout code
       # Tên bước (hiển thị trong log để dễ đọc).
 
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         # Action có sẵn của GitHub: lấy toàn bộ code của repo về máy ảo.
         # Cú pháp: uses = tên action + @phiên_bản (v4 là version).
 
